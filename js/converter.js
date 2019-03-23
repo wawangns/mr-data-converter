@@ -24,14 +24,18 @@ function DataConverter(nodeId) {
                                 {"text":"JSON - Column Arrays",   "id":"jsonArrayCols",    "notes":""},
                                 {"text":"JSON - Row Arrays",      "id":"jsonArrayRows",    "notes":""},
                                 {"text":"JSON - Dictionary",      "id":"jsonDict",         "notes":""},
+                                {"text":"JSON - Simple (one-off)","id":"jsonSimple",       "notes":""},
                                 {"text":"MySQL",                  "id":"mysql",            "notes":""},
                                 {"text":"PHP",                    "id":"php",              "notes":""},
                                 {"text":"Python - Dict",          "id":"python",           "notes":""},
                                 {"text":"Ruby",                   "id":"ruby",             "notes":""},
+                                {"text":"YAML - beta",            "id":"yaml",             "notes":""},
+                                {"text":"Jira Table",             "id":"jiratable",        "notes":""},
+                                {"text":"Redmine Table",          "id":"rmtable",          "notes":""},
                                 {"text":"XML - Properties",       "id":"xmlProperties",    "notes":""},
                                 {"text":"XML - Nodes",            "id":"xml",              "notes":""},
                                 {"text":"XML - Illustrator",      "id":"xmlIllustrator",   "notes":""}];
-  this.outputDataType         = "json";
+  this.outputDataType         = "jiratable";
 
   this.columnDelimiter        = "\t";
   this.rowDelimiter           = "\n";

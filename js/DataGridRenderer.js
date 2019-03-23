@@ -534,5 +534,157 @@ var DataGridRenderer = {
     return outputText;
     
   },
+
+  //---------------------------------------
+  // JSON simple -- a one-off for sample data, 2013-09-11
+  //---------------------------------------
+  
+  jsonSimple: function (dataGrid, headerNames, headerTypes, indent, newLine) {
+    //inits...
+    var commentLine = "//";
+    var commentLineEnd = "";
+    var outputText = "["+newLine;
+    var numRows = dataGrid.length;
+    var numColumns = headerNames.length;
+    
+    //begin render loop
+    for (var i=0; i < numRows; i++) {
+      var row = dataGrid[i];
+      outputText += "{";
+
+      // field name
+      outputText += '"' + row[0] + '"' + ': ';
+
+      var data = row[1];
+      if (data == '')
+      {
+        outputText += ' null ';
+      }
+      else if (data.indexOf(";") != -1)
+      {
+        var vals = data.split(";");
+        var numVals = vals.length;
+        outputText += "[";
+        for (var j=0; j < numVals; j++) {
+           outputText += '"' + vals[j] + '"';
+           if (j < (numVals-1)) {outputText += ", "};
+        }
+        outputText += "]";
+      }
+      else
+      {
+        outputText += '"' + data + '"';
+      }
+  
+      outputText += "}";
+      if (i < (numRows-1)) {outputText += ","+newLine};
+    };
+    outputText += newLine+"]";
+    
+    return outputText;
+  },
+
+  //---------------------------------------
+  // YAML
+  //---------------------------------------
+  yaml: function (dataGrid, headerNames, headerTypes, indent, newLine) {
+    //inits...
+    var commentLine = "#";
+    var commentLineEnd = "";
+    var outputText = "";
+    var numRows = dataGrid.length;
+    var numColumns = headerNames.length;
+    indent = '    ';
+
+    //begin render loop
+    for (var i=0; i < numRows; i++) {
+        var row = dataGrid[i];
+        outputText += newLine+"---"+newLine;
+        for (var j=0; j < numColumns; j++) {
+            outputText += headerNames[j]+': ';
+
+            if (String(row[j]).indexOf("\n") > 0) {
+                outputText += "|"+newLine+indent;
+                var data = row[j];
+                data = data.replace(/\\n/g,"\n");
+                data = data.replace(/\n/g,newLine+indent);
+                outputText += data;
+            } else {
+                outputText += row[j];
+            }
+
+            outputText += newLine
+            };
+    };
+
+    return outputText;
+
+    },
+
+  //---------------------------------------
+  // Jira table
+  //---------------------------------------
+  jiratable: function (dataGrid, headerNames, headerTypes, indent, newLine) {
+    //inits...
+    var outputText = "";
+    var numRows = dataGrid.length;
+    var numColumns = headerNames.length;
+    var indent = "";
+
+    // header row 
+    if (headerNames[0] != "val0") {
+      outputText += indent;
+      for (var j=0; j < numColumns; j++) {
+        outputText += "||" + headerNames[j];
+      };
+      outputText += "||" + newLine;
+    };
+
+    //begin render loop
+    for (var i=0; i < numRows; i++) {
+      outputText += indent+"| ";
+      for (var j=0; j < numColumns; j++) {
+        outputText += dataGrid[i][j];
+        if (j < (numColumns-1)) {outputText+=" | "};
+      };
+      outputText += " |" + newLine;
+    };
+
+    return outputText;
+  },
+
+
+  //---------------------------------------
+  // Redmine table
+  //---------------------------------------
+  rmtable: function (dataGrid, headerNames, headerTypes, indent, newLine) {
+    //inits...
+    var outputText = "";
+    var numRows = dataGrid.length;
+    var numColumns = headerNames.length;
+    var indent = "";
+
+    // header row 
+    if (headerNames[0] != "val0") {
+      outputText += indent+"|";
+      for (var j=0; j < numColumns; j++) {
+        outputText += "_." + headerNames[j];
+        if (j < (numColumns-1)) {outputText+=" |"};
+      };
+      outputText += " |" + newLine;
+    };
+    
+    //begin render loop
+    for (var i=0; i < numRows; i++) {
+      outputText += indent+"| ";
+      for (var j=0; j < numColumns; j++) {
+        outputText += dataGrid[i][j];
+        if (j < (numColumns-1)) {outputText+=" | "};
+      };
+      outputText += " |" + newLine;
+    };
+    
+    return outputText;
+  }
   
 }
