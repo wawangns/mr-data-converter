@@ -686,8 +686,9 @@ var DataGridRenderer = {
       outputText += indent+"| ";
       for (var j=0; j < numColumns; j++) {
         cellData = dataGrid[i][j];
-        if (String(cellData).indexOf("\n") > 0) {
-            cellData = cellData.replace(/\n/g,'\\n');
+        // textile can handle line breaks, so translate \n back to a newline:
+        if (String(cellData).indexOf("\\n") > 0) {
+            cellData = cellData.replace(/\\n/g,"\n");
         }
         outputText += cellData;
         if (j < (numColumns-1)) {outputText+=" | "};

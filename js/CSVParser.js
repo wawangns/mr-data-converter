@@ -69,6 +69,22 @@ var CSVParser = {
     //   dataArray.push(arr[i].split(columnDelimiter));
     // };
 
+    // If a line starts with the record delimiter, assume it is a continuation of the previous record.
+    // Find each such line and smush it onto the preceding record.
+    var recordRE = new RegExp(rowDelimiter);
+    var startsWithDelimiterRE = new RegExp("^" + columnDelimiter, "i");
+    var lines = input.split(recordRE);
+    var smushedLines = [];
+    for (var i=0; i<lines.length; i++){
+      var line = lines[i];
+      if (startsWithDelimiterRE.test(line)){
+        smushedLines[smushedLines.length-1] += line;
+      }
+      else{
+        smushedLines.push(line);
+      }
+    }
+    input = smushedLines.join(rowDelimiter);
 
     // dataArray = jQuery.csv(columnDelimiter)(input);
     dataArray = this.CSVToArray(input, columnDelimiter);
