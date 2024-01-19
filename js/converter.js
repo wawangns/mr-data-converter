@@ -64,6 +64,19 @@ function DataConverter(nodeId) {
   this.includeWhiteSpace      = true;
   this.useTabsForIndent       = false;
 
+  this.storageAvailable       = (function() {
+    let storage;
+    try {
+      storage = window['localStorage']
+      const test = "__storage_test__";
+      storage.setItem(test, test);
+      storage.removeItem(test);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  })();
+
 }
 
 //---------------------------------------
@@ -72,6 +85,15 @@ function DataConverter(nodeId) {
 
 DataConverter.prototype.create = function(w,h) {
   var self = this;
+
+  // If LocalStorage available, save/ retrieve the outputDataType variable
+  if (this.storageAvailable) {
+    if(!localStorage.getItem('outputDataType')) {
+      localStorage.setItem('outputDataType', this.outputDataType);
+    } else {
+      this.outputDataType = localStorage.getItem('outputDataType');
+    }
+  }
 
   //build HTML for converter
   this.inputHeader = $('<div class="groupHeader" id="inputHeader"><p class="groupHeadline">Input CSV or tab-delimited data. <span class="subhead"> Using Excel? Simply copy and paste. No data on hand? <a href="#" id="insertSample">Use sample</a></span></p></div>');
@@ -122,6 +144,10 @@ DataConverter.prototype.create = function(w,h) {
   $("#dataSelector").bind('change',function(evt){
        self.outputDataType = $(this).val();
        self.convert();
+       if (self.storageAvailable) {
+         // save the outputDataType variable to LocalStorage
+         localStorage.setItem('outputDataType', self.outputDataType);
+       }
      });
 
   this.resize(w,h);
